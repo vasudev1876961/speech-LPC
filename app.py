@@ -3,10 +3,15 @@ app.py
 ------
 Interactive Streamlit Dashboard for Linear Predictive Coding (LPC) Speech Analysis.
 Provides:
-  - Audio playback (Original Speech vs LPC Residual)
-  - Interactive parameter controls (LPC Order, Frame length, Hop length)
-  - Rich visual analysis: Waveforms, Spectrograms, LPC Filter Spectral Envelopes
-  - Word comparison mode ('kaha' vs 'kahaan')
+  - Audio playback (Original Speech vs LPC Residual Excitation)
+  - Interactive parameter controls (LPC Order, Frame length, Hop length, Pre-emphasis)
+  - Rich visual analysis: Waveforms, Spectrograms, LPC Spectral Envelopes
+  - Multi-Voice & Minimal Pair Comparison Studio:
+      * Hindi Minimal Pairs ('kaha' vs 'kahaan', 'baas' vs 'baans', 'saas' vs 'saans')
+      * Speaker Gender & Pitch Contrasts (Male vs Female voice)
+      * Cardinal Vowels (/i/ vs /u/, vocal tract geometry)
+      * Voiced vs Whispered excitation source
+      * Custom 2-voice pairwise comparator
   - One-click export for Member 3 & Member 4 deliverables (.npy, .wav, .json)
 """
 
@@ -28,16 +33,17 @@ from lpc_core.visualizer import (
     plot_spectrogram_comparison,
     plot_lpc_spectral_envelope
 )
+from compare_words import compare_pair
 
 # Page configuration
 st.set_page_config(
-    page_title="LPC Speech Analyzer | Member 2",
+    page_title="LPC Speech & Voice Analysis Suite",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# CSS for a clean, modern aesthetic
+# Custom styling
 st.markdown("""
 <style>
     .main-title {
@@ -59,20 +65,52 @@ st.markdown("""
         text-align: center;
     }
     .stAudio {
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+    .comparison-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background-color: #e0e7ff;
+        color: #3730a3;
+        font-weight: 600;
+        font-size: 0.88rem;
+        margin-bottom: 8px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">🎙️ Linear Predictive Coding (LPC) Speech Analysis</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Acoustic Feature & Residual Signal Extraction Module (Member 2 Deliverable)</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">🎙️ Linear Predictive Coding (LPC) Speech & Voice Suite</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Acoustic Feature Extraction, Inverse Filtering, & Cross-Voice Comparative Analysis</div>', unsafe_allow_html=True)
+
+# Ensure essential audio samples exist
+if not os.path.exists("data/kaha.wav") or not os.path.exists("data/baas.wav"):
+    os.system("python generate_test_audio.py")
+
+# Available presets dictionary
+PRESET_AUDIOS = {
+    "कहा (kaha) - Oral /a/ [Male Standard]": "data/kaha.wav",
+    "कहाँ (kahaan) - Nasalized /ã/ [Male]": "data/kahaan.wav",
+    "बास (baas) - Oral /aː/ [Male]": "data/baas.wav",
+    "बाँस (baans) - Nasalized /ãː/ [Male]": "data/baans.wav",
+    "सास (saas) - Oral /aː/ [Male]": "data/saas.wav",
+    "साँस (saans) - Nasalized /ãː/ [Male]": "data/saans.wav",
+    "कहा (kaha) - Female Voice (F0 ~ 225 Hz)": "data/kaha_female.wav",
+    "कहा (kaha) - Deep Baritone Voice (F0 ~ 95 Hz)": "data/kaha_deep_male.wav",
+    "Hello - Male Voice (F0 ~ 125 Hz)": "data/hello.wav",
+    "Hello - Female Voice (F0 ~ 230 Hz)": "data/hello_female.wav",
+    "Vowel /a/ ('father') - Open Vowel": "data/vowel_a.wav",
+    "Vowel /i/ ('see') - High Front Vowel": "data/vowel_i.wav",
+    "Vowel /u/ ('boot') - High Back Rounded Vowel": "data/vowel_u.wav",
+    "कहा (kaha) - Whispered (Unvoiced Noise Source)": "data/whisper_kaha.wav"
+}
 
 # Sidebar settings
 st.sidebar.header("⚙️ Configuration")
-mode = st.sidebar.radio("Analysis Mode", ["Single Audio Analysis", "Compare Words ('kaha' vs 'kahaan')"])
+mode = st.sidebar.radio("Analysis Mode", ["Single Audio Analysis", "Compare Voices & Words"])
 
-st.sidebar.subheader("LPC Parameters")
+st.sidebar.subheader("LPC DSP Parameters")
 order = st.sidebar.slider("LPC Order (p)", min_value=4, max_value=24, value=16, step=2,
                          help="Number of predictor coefficients. Rule of thumb: fs/1000 + 4.")
 frame_ms = st.sidebar.slider("Frame Length (ms)", min_value=10.0, max_value=40.0, value=25.0, step=2.5,
@@ -82,20 +120,17 @@ hop_ms = st.sidebar.slider("Hop Length (ms)", min_value=5.0, max_value=20.0, val
 pre_emphasis = st.sidebar.checkbox("Apply Pre-emphasis (alpha=0.97)", value=True,
                                   help="Boosts higher formant frequencies by flattening glottal roll-off.")
 
-# Ensure sample files exist
-for sample in ["data/kaha.wav", "data/kahaan.wav", "data/hello.wav"]:
-    if not os.path.exists(sample):
-        os.system("python generate_test_audio.py")
-        break
-
+# =========================================================================
+# MODE 1: SINGLE AUDIO ANALYSIS
+# =========================================================================
 if mode == "Single Audio Analysis":
-    st.subheader("1. Audio Input")
-    input_source = st.radio("Choose audio source:", ["Preset Sample Audio", "Upload Custom WAV"], horizontal=True)
+    st.subheader("1. Audio Input Selection")
+    input_source = st.radio("Choose audio source:", ["Preset Voice Sample", "Upload Custom WAV"], horizontal=True)
     
     audio_path = None
-    if input_source == "Preset Sample Audio":
-        sample_choice = st.selectbox("Select preset word:", ["data/kaha.wav (कहा)", "data/kahaan.wav (कहाँ)", "data/hello.wav (Hello)"])
-        audio_path = sample_choice.split()[0]
+    if input_source == "Preset Voice Sample":
+        sample_label = st.selectbox("Select preset utterance:", list(PRESET_AUDIOS.keys()))
+        audio_path = PRESET_AUDIOS[sample_label]
     else:
         uploaded_file = st.file_uploader("Upload 16kHz WAV file", type=["wav"])
         if uploaded_file is not None:
@@ -128,15 +163,15 @@ if mode == "Single Audio Analysis":
         with col_a1:
             st.markdown("##### 🔊 Original Speech Recording")
             st.audio(audio_path)
+            st.caption(f"File: `{os.path.basename(audio_path)}` | Samples: {len(raw_sig):,} ({len(raw_sig)/fs:.2f}s)")
         with col_a2:
             st.markdown("##### 🔊 LPC Residual (Excitation Source)")
-            # Export residual as temp buffer for streamlit audio
             res_norm = residual / (np.max(np.abs(residual)) + 1e-9) * 0.9
             res_int16 = np.int16(np.clip(res_norm, -1.0, 1.0) * 32767)
             wav_bytes = io.BytesIO()
             wavfile.write(wav_bytes, fs, res_int16)
             st.audio(wav_bytes.getvalue(), format="audio/wav")
-            st.caption("Notice: Vocal tract resonances are removed, leaving glottal pulses/noise.")
+            st.caption("Acoustic Inverse Filter: Vocal tract resonances removed, leaving glottal pulses.")
 
         # Metric summary cards
         m1, m2, m3, m4 = st.columns(4)
@@ -145,9 +180,9 @@ if mode == "Single Audio Analysis":
         with m2:
             st.metric("LPC Matrix Shape", f"{coeffs.shape[0]} × {coeffs.shape[1]}")
         with m3:
-            st.metric("Mean Prediction Gain", f"{features['mean_prediction_gain_db']:.2f} dB")
+            st.metric("Prediction Gain", f"{features['mean_prediction_gain_db']:.2f} dB")
         with m4:
-            st.metric("Residual RMS Energy", f"{features['mean_residual_rms']:.4f}")
+            st.metric("Residual RMS", f"{features['mean_residual_rms']:.4f}")
 
         st.markdown("---")
         
@@ -179,7 +214,6 @@ if mode == "Single Audio Analysis":
             st.pyplot(fig3)
             plt.close(fig3)
             
-            # Formant values
             f_vals, _ = extract_formants_from_lpc(coeffs[frame_slider], fs=fs)
             st.write("**Extracted Formants for this frame:** " + ", ".join([f"**F{i+1}:** {int(f)} Hz" for i, f in enumerate(f_vals[:4])]))
 
@@ -216,35 +250,103 @@ if mode == "Single Audio Analysis":
                 mime="audio/wav"
             )
 
+# =========================================================================
+# MODE 2: COMPARE VOICES & WORDS
+# =========================================================================
 else:
-    # Comparison Mode
-    st.subheader("Word Comparison: 'kaha' (कहा) vs 'kahaan' (कहाँ)")
-    st.info("Member 2 provides the mathematical extraction (LPC coefficients & residuals). This tool demonstrates how the residual and LPC filter capture differences between oral and nasalized vowels.")
+    st.subheader("👥 Comparative Voice & Minimal Pair Studio")
+    st.markdown("Compare vocal tract filters, formant shifts, and glottal residual signals across minimal pairs, speaker genders, vowels, and excitation sources.")
     
-    if os.path.exists("data/kaha.wav") and os.path.exists("data/kahaan.wav"):
-        from compare_words import compare_pair
+    COMPARISON_PRESETS = {
+        "1. Minimal Pair: 'kaha' vs 'kahaan' (कहा vs कहाँ — Oral vs Nasalized)": ("data/kaha.wav", "data/kahaan.wav", "kaha", "kahaan"),
+        "2. Minimal Pair: 'baas' vs 'baans' (बास vs बाँस — Oral vs Nasalized)": ("data/baas.wav", "data/baans.wav", "baas", "baans"),
+        "3. Minimal Pair: 'saas' vs 'saans' (सास vs साँस — Oral vs Nasalized)": ("data/saas.wav", "data/saans.wav", "saas", "saans"),
+        "4. Speaker Voice: 'kaha' Male vs 'kaha' Female (Pitch F0 & Vocal Tract Length)": ("data/kaha.wav", "data/kaha_female.wav", "kaha_male", "kaha_female"),
+        "5. Speaker Voice: 'hello' Male vs 'hello' Female": ("data/hello.wav", "data/hello_female.wav", "hello_male", "hello_female"),
+        "6. Vocal Tract Shape: Vowel /i/ ('see') vs Vowel /u/ ('boot')": ("data/vowel_i.wav", "data/vowel_u.wav", "vowel_i", "vowel_u"),
+        "7. Excitation Contrast: Voiced 'kaha' vs Whispered 'whisper_kaha'": ("data/kaha.wav", "data/whisper_kaha.wav", "kaha_voiced", "kaha_whisper"),
+        "8. ⚙️ Custom Pair Selection": (None, None, "voice_1", "voice_2")
+    }
+    
+    preset_selection = st.selectbox("Select Voice / Minimal Pair Comparison:", list(COMPARISON_PRESETS.keys()))
+    f1_default, f2_default, n1_default, n2_default = COMPARISON_PRESETS[preset_selection]
+    
+    if preset_selection.startswith("8."):
+        # Custom selection
+        c_col1, c_col2 = st.columns(2)
+        with c_col1:
+            all_files = list(PRESET_AUDIOS.keys())
+            f1_choice = st.selectbox("Select Voice 1:", all_files, index=0)
+            file1 = PRESET_AUDIOS[f1_choice]
+            name1 = os.path.splitext(os.path.basename(file1))[0]
+        with c_col2:
+            f2_choice = st.selectbox("Select Voice 2:", all_files, index=1)
+            file2 = PRESET_AUDIOS[f2_choice]
+            name2 = os.path.splitext(os.path.basename(file2))[0]
+    else:
+        file1 = f1_default
+        file2 = f2_default
+        name1 = n1_default
+        name2 = n2_default
         
-        if st.button("🚀 Run Comparative Analysis"):
-            with st.spinner("Analyzing minimal pair with LPC..."):
-                report = compare_pair("data/kaha.wav", "data/kahaan.wav", name1="kaha", name2="kahaan")
-                st.success("Comparison completed!")
+    # Audio comparison players
+    pcol1, pcol2 = st.columns(2)
+    with pcol1:
+        st.markdown(f"##### 🔊 Voice 1: `{name1}`")
+        if os.path.exists(file1):
+            st.audio(file1)
+    with pcol2:
+        st.markdown(f"##### 🔊 Voice 2: `{name2}`")
+        if os.path.exists(file2):
+            st.audio(file2)
+            
+    st.markdown("---")
+    
+    # Run Comparison
+    if st.button("🚀 Run LPC Comparative Analysis", type="primary"):
+        with st.spinner(f"Analyzing and comparing '{name1}' vs '{name2}' with LPC..."):
+            report = compare_pair(file1, file2, name1=name1, name2=name2)
+            st.success("Analysis complete!")
+            
+            # Key comparative metrics
+            cm1, cm2, cm3, cm4 = st.columns(4)
+            with cm1:
+                st.metric("LPC Cosine Distance", f"{report['mean_lpc_cosine_distance']:.4f}", help="0 = Identical vocal tract filter, 1 = Orthogonal")
+            with cm2:
+                st.metric(f"{name1} Residual RMS", f"{report['word1_mean_residual_rms']:.4f}")
+            with cm3:
+                st.metric(f"{name2} Residual RMS", f"{report['word2_mean_residual_rms']:.4f}")
+            with cm4:
+                st.metric("Residual Energy Ratio", f"{report['residual_rms_ratio']:.2f}")
                 
-                c_m1, c_m2, c_m3 = st.columns(3)
-                with c_m1:
-                    st.metric("LPC Cosine Distance", f"{report['mean_lpc_cosine_distance']:.4f}")
-                with c_m2:
-                    st.metric("kaha Residual RMS", f"{report['word1_mean_residual_rms']:.4f}")
-                with c_m3:
-                    st.metric("kahaan Residual RMS", f"{report['word2_mean_residual_rms']:.4f}")
-                    
-                st.write("**Formant Comparison (Syllable 2):**")
-                col_f1, col_f2 = st.columns(2)
-                with col_f1:
-                    st.write("Oral 'kaha' Formants:", [f"{f} Hz" for f in report['word1_vowel_formants_hz']])
-                with col_f2:
-                    st.write("Nasalized 'kahaan' Formants:", [f"{f} Hz" for f in report['word2_vowel_formants_hz']])
-                    
-                if os.path.exists("outputs/comparison/comparison_kaha_vs_kahaan.png"):
-                    st.image("outputs/comparison/comparison_kaha_vs_kahaan.png", caption="Side-by-side Speech & Residual Comparison")
-                if os.path.exists("outputs/comparison/spectral_envelope_kaha_vs_kahaan.png"):
-                    st.image("outputs/comparison/spectral_envelope_kaha_vs_kahaan.png", caption="LPC Spectral Envelopes: Oral /a/ vs Nasalized /ã/")
+            # Acoustic explanation alert
+            st.info(f"💡 **Acoustic Phonetics Interpretation:** {report['acoustic_interpretation']}")
+            
+            # Formant comparison table
+            st.write("##### 🔬 Formant Resonances (Mid-Vowel Region)")
+            formant_data = {
+                "Formant": ["F1", "F2", "F3", "F4"],
+                f"{name1} (Hz)": [f"{f} Hz" for f in (report['word1_vowel_formants_hz'] + [0,0,0,0])[:4]],
+                f"{name2} (Hz)": [f"{f} Hz" for f in (report['word2_vowel_formants_hz'] + [0,0,0,0])[:4]]
+            }
+            st.table(formant_data)
+            
+            # Show Visuals
+            st.write("##### 📈 Comparative Acoustic Visualizations")
+            
+            comp_plot = report.get('comparison_plot')
+            envelope_plot = report.get('spectral_envelope_plot')
+            
+            if comp_plot and os.path.exists(comp_plot):
+                st.image(comp_plot, caption=f"Speech Waveforms, LPC Residuals & RMS Energy Contours ({name1} vs {name2})", use_container_width=True)
+                
+            if envelope_plot and os.path.exists(envelope_plot):
+                st.image(envelope_plot, caption=f"LPC Spectral Envelope Overlay ({name1} vs {name2})", use_container_width=True)
+                
+            # Download JSON report
+            st.download_button(
+                "📥 Download Comparison Report (.json)",
+                data=json.dumps(report, indent=2),
+                file_name=f"lpc_comparison_{name1}_vs_{name2}.json",
+                mime="application/json"
+            )

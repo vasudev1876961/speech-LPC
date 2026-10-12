@@ -167,21 +167,24 @@ def process_file(
         
     # Generate and save plots
     p1 = os.path.join(plots_dir, "waveform_and_residual.png")
-    plot_waveform_and_residual(raw_signal, residual, fs, title=f"'{base_name}'", save_path=p1)
+    f1 = plot_waveform_and_residual(raw_signal, residual, fs, title=f"'{base_name}'", save_path=p1)
+    plt.close(f1)
     
     p2 = os.path.join(plots_dir, "spectrogram_comparison.png")
-    plot_spectrogram_comparison(raw_signal, residual, fs, title=f"'{base_name}' Spectrogram", save_path=p2)
+    f2 = plot_spectrogram_comparison(raw_signal, residual, fs, title=f"'{base_name}' Spectrogram", save_path=p2)
+    plt.close(f2)
     
     mid_start = lpc_results['indices'][mid_frame_idx]
     mid_frame_samples = proc_signal[mid_start : mid_start + lpc_results['frame_len']]
     p3 = os.path.join(plots_dir, "lpc_spectral_envelope.png")
-    plot_lpc_spectral_envelope(
+    f3 = plot_lpc_spectral_envelope(
         mid_frame_samples,
         lpc_coeffs[mid_frame_idx],
         fs,
         frame_time=lpc_results['frame_times'][mid_frame_idx],
         save_path=p3
     )
+    plt.close(f3)
 
     if verbose:
         print(f"  [+] Saved: {coeff_file}")

@@ -1,0 +1,27 @@
+{
+  "file_name": "vowel_u.wav",
+  "fs": 16000,
+  "duration_seconds": 0.65,
+  "total_samples": 10400,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 63,
+  "coefficients_shape": [
+    63,
+    17
+  ],
+  "mean_prediction_gain_db": 4.2,
+  "mean_residual_rms": 0.0825,
+  "residual_spectral_flatness": 0.4861,
+  "speech_spectral_flatness": 0.1881,
+  "representative_formants_hz": [
+    871.8,
+    2256.9
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/vowel_u\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/vowel_u\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/vowel_u\\lpc_residual.wav"
+  }
+}

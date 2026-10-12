@@ -1,0 +1,23 @@
+{
+  "word1": "saas",
+  "word2": "saans",
+  "file1": "data/saas.wav",
+  "file2": "data/saans.wav",
+  "mean_lpc_cosine_distance": 0.0806,
+  "word1_mean_residual_rms": 0.0754,
+  "word2_mean_residual_rms": 0.079,
+  "residual_rms_ratio": 1.047,
+  "word1_vowel_formants_hz": [
+    1223.5,
+    2598.2
+  ],
+  "word2_vowel_formants_hz": [
+    2734.4,
+    4417.6,
+    5483.0,
+    6576.2
+  ],
+  "acoustic_interpretation": "Minimal pair contrast (Oral vs Nasalized): LPC cosine distance is 0.0806. The nasalized syllable introduces an acoustic zero (anti-resonance) and an extra low-frequency nasal pole (~280-320 Hz), broadening formant bandwidths. The residual energy ratio is 1.05, reflecting glottal-nasal acoustic coupling.",
+  "comparison_plot": "outputs/comparison\\comparison_saas_vs_saans.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_saas_vs_saans.png"
+}

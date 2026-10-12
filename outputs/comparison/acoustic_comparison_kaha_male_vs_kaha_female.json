@@ -1,0 +1,23 @@
+{
+  "word1": "kaha_male",
+  "word2": "kaha_female",
+  "file1": "data/kaha.wav",
+  "file2": "data/kaha_female.wav",
+  "mean_lpc_cosine_distance": 0.1104,
+  "word1_mean_residual_rms": 0.0707,
+  "word2_mean_residual_rms": 0.0763,
+  "residual_rms_ratio": 1.079,
+  "word1_vowel_formants_hz": [
+    1232.4,
+    2660.0
+  ],
+  "word2_vowel_formants_hz": [
+    979.9,
+    1630.6,
+    3046.2,
+    3572.5
+  ],
+  "acoustic_interpretation": "Speaker voice comparison (Male vs Female): The female speaker exhibits a substantially higher pitch excitation rate in the LPC residual (shorter pitch periods). Due to an anatomically shorter vocal tract (~14.5 cm vs ~17.5 cm), formant resonances are shifted upward by ~15-20%, resulting in an LPC cosine divergence of 0.1104.",
+  "comparison_plot": "outputs/comparison\\comparison_kaha_male_vs_kaha_female.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_kaha_male_vs_kaha_female.png"
+}

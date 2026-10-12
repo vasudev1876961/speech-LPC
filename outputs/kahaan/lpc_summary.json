@@ -11,15 +11,15 @@
     72,
     17
   ],
-  "mean_prediction_gain_db": 3.06,
-  "mean_residual_rms": 0.1006,
-  "residual_spectral_flatness": 0.4978,
-  "speech_spectral_flatness": 0.244,
+  "mean_prediction_gain_db": 3.19,
+  "mean_residual_rms": 0.1015,
+  "residual_spectral_flatness": 0.5014,
+  "speech_spectral_flatness": 0.2337,
   "representative_formants_hz": [
-    1304.2,
-    2775.7,
-    3572.0,
-    4622.2
+    1153.1,
+    2806.1,
+    4478.1,
+    7566.9
   ],
   "outputs": {
     "lpc_coefficients_npy": "outputs/kahaan\\lpc_coefficients.npy",

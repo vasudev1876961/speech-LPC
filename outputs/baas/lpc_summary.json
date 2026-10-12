@@ -1,0 +1,29 @@
+{
+  "file_name": "baas.wav",
+  "fs": 16000,
+  "duration_seconds": 0.75,
+  "total_samples": 12000,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 73,
+  "coefficients_shape": [
+    73,
+    17
+  ],
+  "mean_prediction_gain_db": 9.39,
+  "mean_residual_rms": 0.068,
+  "residual_spectral_flatness": 0.3782,
+  "speech_spectral_flatness": 0.1118,
+  "representative_formants_hz": [
+    1304.4,
+    2617.7,
+    3614.2,
+    5605.0
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/baas\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/baas\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/baas\\lpc_residual.wav"
+  }
+}

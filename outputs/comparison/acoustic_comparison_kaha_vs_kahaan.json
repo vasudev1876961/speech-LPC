@@ -1,0 +1,21 @@
+{
+  "word1": "kaha",
+  "word2": "kahaan",
+  "file1": "data/kaha.wav",
+  "file2": "data/kahaan.wav",
+  "mean_lpc_cosine_distance": 0.0605,
+  "word1_mean_residual_rms": 0.0707,
+  "word2_mean_residual_rms": 0.1015,
+  "residual_rms_ratio": 1.436,
+  "word1_vowel_formants_hz": [
+    1232.4,
+    2660.0
+  ],
+  "word2_vowel_formants_hz": [
+    1083.2,
+    2770.5
+  ],
+  "acoustic_interpretation": "Minimal pair contrast (Oral vs Nasalized): LPC cosine distance is 0.0605. The nasalized syllable introduces an acoustic zero (anti-resonance) and an extra low-frequency nasal pole (~280-320 Hz), broadening formant bandwidths. The residual energy ratio is 1.44, reflecting glottal-nasal acoustic coupling.",
+  "comparison_plot": "outputs/comparison\\comparison_kaha_vs_kahaan.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_kaha_vs_kahaan.png"
+}

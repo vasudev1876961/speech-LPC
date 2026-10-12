@@ -1,0 +1,27 @@
+{
+  "file_name": "saans.wav",
+  "fs": 16000,
+  "duration_seconds": 0.78,
+  "total_samples": 12480,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 76,
+  "coefficients_shape": [
+    76,
+    17
+  ],
+  "mean_prediction_gain_db": 9.46,
+  "mean_residual_rms": 0.079,
+  "residual_spectral_flatness": 0.3651,
+  "speech_spectral_flatness": 0.144,
+  "representative_formants_hz": [
+    1266.3,
+    2712.8
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/saans\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/saans\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/saans\\lpc_residual.wav"
+  }
+}

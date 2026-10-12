@@ -1,0 +1,22 @@
+{
+  "word1": "kaha_voiced",
+  "word2": "kaha_whisper",
+  "file1": "data/kaha.wav",
+  "file2": "data/whisper_kaha.wav",
+  "mean_lpc_cosine_distance": 0.2459,
+  "word1_mean_residual_rms": 0.0707,
+  "word2_mean_residual_rms": 0.0436,
+  "residual_rms_ratio": 0.617,
+  "word1_vowel_formants_hz": [
+    1232.4,
+    2660.0
+  ],
+  "word2_vowel_formants_hz": [
+    824.4,
+    1317.5,
+    2650.3
+  ],
+  "acoustic_interpretation": "Excitation source contrast: Voiced speech produces quasi-periodic glottal impulse spikes in the residual, whereas whispered speech excitation is purely turbulent continuous noise with no pitch harmonics.",
+  "comparison_plot": "outputs/comparison\\comparison_kaha_voiced_vs_kaha_whisper.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_kaha_voiced_vs_kaha_whisper.png"
+}

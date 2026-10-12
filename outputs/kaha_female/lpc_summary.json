@@ -1,0 +1,27 @@
+{
+  "file_name": "kaha_female.wav",
+  "fs": 16000,
+  "duration_seconds": 0.7,
+  "total_samples": 11200,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 68,
+  "coefficients_shape": [
+    68,
+    17
+  ],
+  "mean_prediction_gain_db": 4.38,
+  "mean_residual_rms": 0.0763,
+  "residual_spectral_flatness": 0.4545,
+  "speech_spectral_flatness": 0.17,
+  "representative_formants_hz": [
+    870.5,
+    1587.0
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/kaha_female\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/kaha_female\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/kaha_female\\lpc_residual.wav"
+  }
+}

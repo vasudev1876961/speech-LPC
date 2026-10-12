@@ -1,0 +1,26 @@
+{
+  "file_name": "hello_female.wav",
+  "fs": 16000,
+  "duration_seconds": 0.7,
+  "total_samples": 11200,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 68,
+  "coefficients_shape": [
+    68,
+    17
+  ],
+  "mean_prediction_gain_db": 5.14,
+  "mean_residual_rms": 0.0687,
+  "residual_spectral_flatness": 0.4531,
+  "speech_spectral_flatness": 0.1547,
+  "representative_formants_hz": [
+    1396.9
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/hello_female\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/hello_female\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/hello_female\\lpc_residual.wav"
+  }
+}

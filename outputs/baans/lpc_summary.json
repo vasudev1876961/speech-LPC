@@ -1,0 +1,28 @@
+{
+  "file_name": "baans.wav",
+  "fs": 16000,
+  "duration_seconds": 0.75,
+  "total_samples": 12000,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 73,
+  "coefficients_shape": [
+    73,
+    17
+  ],
+  "mean_prediction_gain_db": 8.58,
+  "mean_residual_rms": 0.0854,
+  "residual_spectral_flatness": 0.4222,
+  "speech_spectral_flatness": 0.1764,
+  "representative_formants_hz": [
+    1147.0,
+    2701.2,
+    3603.9
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/baans\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/baans\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/baans\\lpc_residual.wav"
+  }
+}

@@ -13,19 +13,24 @@ Specifically tailored to analyze and distinguish Hindi minimal pairs like **"क
 LPC/
 │
 ├── data/                                 # Audio recordings (16 kHz, Mono)
-│   ├── kaha.wav                          # Minimal pair 1: oral vowel /a/
-│   ├── kahaan.wav                        # Minimal pair 2: nasalized vowel /ã/
-│   └── hello.wav                         # Test greeting speech
+│   ├── kaha.wav                          # Minimal pair 1: oral vowel /a/ (Male)
+│   ├── kahaan.wav                        # Minimal pair 2: nasalized vowel /ã/ (Male)
+│   ├── baas.wav                          # Minimal pair 3: oral vowel /aː/ ("बास")
+│   ├── baans.wav                         # Minimal pair 4: nasalized vowel /ãː/ ("बाँस")
+│   ├── saas.wav                          # Minimal pair 5: oral vowel /aː/ ("सास")
+│   ├── saans.wav                         # Minimal pair 6: nasalized vowel /ãː/ ("साँस")
+│   ├── kaha_female.wav                   # Female speaker voice (F0 ~ 225 Hz, shorter tract)
+│   ├── kaha_deep_male.wav                # Deep baritone speaker voice (F0 ~ 95 Hz)
+│   ├── hello.wav                         # Male greeting speech
+│   ├── hello_female.wav                  # Female greeting speech
+│   ├── vowel_a.wav                       # Cardinal open vowel /a/
+│   ├── vowel_i.wav                       # Cardinal high-front vowel /i/
+│   ├── vowel_u.wav                       # Cardinal high-back rounded vowel /u/
+│   └── whisper_kaha.wav                  # Whispered "kaha" (unvoiced noise excitation)
 │
 ├── outputs/                              # Generated deliverables for Members 3 & 4
-│   ├── kaha/
-│   │   ├── lpc_coefficients.npy          # Estimated filter weights (num_frames, 17)
-│   │   ├── lpc_residual.npy              # Numerical residual signal (num_samples,)
-│   │   ├── lpc_residual.wav              # Playable residual audio
-│   │   ├── lpc_summary.json              # Acoustic summary & formant metrics
-│   │   └── plots/                        # Waveform, Spectrogram & Formant Envelope
-│   ├── kahaan/
-│   └── comparison/                       # Side-by-side comparison report & graphs
+│   ├── kaha/, kahaan/, hello/, ...       # Extracted coefficients, residuals & plots
+│   └── comparison/                       # Side-by-side comparison reports & graphs
 │
 ├── lpc_core/                             # Core Python DSP library
 │   ├── __init__.py
@@ -37,7 +42,7 @@ LPC/
 │   └── visualizer.py                     # High-res publication-quality plots
 │
 ├── run_lpc.py                            # CLI execution script for single WAV files
-├── compare_words.py                      # Comparative script for minimal pairs
+├── compare_words.py                      # Comparative script for pairs and voices
 ├── app.py                                # Interactive Streamlit Web Application
 ├── generate_test_audio.py                # Source-filter speech synthesis tool
 ├── LPC_Analysis_Walkthrough.ipynb        # Runnable Jupyter Notebook for demos & grading
@@ -64,21 +69,28 @@ This automatically extracts and saves:
 
 ---
 
-### 2. Compare Two Words (e.g. 'kaha' vs 'kahaan')
-To run the automated acoustic comparison:
+### 2. Compare Voices and Words (Acoustic Phonetics)
+To run pairwise comparisons between any two voices or words:
 ```bash
+# Compare minimal pair: oral vs nasalized vowel
 python compare_words.py --file1 data/kaha.wav --file2 data/kahaan.wav --name1 kaha --name2 kahaan
+
+# Compare speaker voices: male vs female pitch & vocal tract length
+python compare_words.py --file1 data/kaha.wav --file2 data/kaha_female.wav --name1 kaha_male --name2 kaha_female
+
+# Run all 7 benchmark voice comparisons in batch
+python compare_words.py --all
 ```
 This outputs:
 - Mean LPC Cosine Distance
-- Residual RMS energy comparison
-- Formant shifts between oral and nasalized vowels
-- Multi-panel comparison graphs in `outputs/comparison/`
+- Residual RMS energy comparison and ratio
+- Formant frequency shifts (F1-F4)
+- Multi-panel comparison graphs and spectral envelope overlays in `outputs/comparison/`
 
 ---
 
 ### 3. Launch the Interactive Web Dashboard
-Run the Streamlit application to explore the audio, listen to the residual, and inspect plots interactively:
+Run the Streamlit application to explore audio, listen to the residual, and compare voices interactively:
 ```bash
 streamlit run app.py
 ```

@@ -1,0 +1,26 @@
+{
+  "file_name": "kaha.wav",
+  "fs": 16000,
+  "duration_seconds": 0.7,
+  "total_samples": 11200,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 68,
+  "coefficients_shape": [
+    68,
+    17
+  ],
+  "mean_prediction_gain_db": 3.99,
+  "mean_residual_rms": 0.0707,
+  "residual_spectral_flatness": 0.4667,
+  "speech_spectral_flatness": 0.1856,
+  "representative_formants_hz": [
+    1410.6
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/kaha_male\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/kaha_male\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/kaha_male\\lpc_residual.wav"
+  }
+}

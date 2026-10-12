@@ -1,0 +1,22 @@
+{
+  "word1": "vowel_i",
+  "word2": "vowel_u",
+  "file1": "data/vowel_i.wav",
+  "file2": "data/vowel_u.wav",
+  "mean_lpc_cosine_distance": 0.3744,
+  "word1_mean_residual_rms": 0.0731,
+  "word2_mean_residual_rms": 0.0825,
+  "residual_rms_ratio": 1.128,
+  "word1_vowel_formants_hz": [
+    2228.9,
+    3021.5,
+    4417.9
+  ],
+  "word2_vowel_formants_hz": [
+    839.7,
+    2311.3
+  ],
+  "acoustic_interpretation": "Vowel formant topology contrast: Distinct vocal tract geometries yield clear differences in F1 (jaw opening / tongue height) and F2 (tongue advancement / front-back position), reflected in an LPC cosine distance of 0.3744.",
+  "comparison_plot": "outputs/comparison\\comparison_vowel_i_vs_vowel_u.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_vowel_i_vs_vowel_u.png"
+}

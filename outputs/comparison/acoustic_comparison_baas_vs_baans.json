@@ -1,0 +1,21 @@
+{
+  "word1": "baas",
+  "word2": "baans",
+  "file1": "data/baas.wav",
+  "file2": "data/baans.wav",
+  "mean_lpc_cosine_distance": 0.1029,
+  "word1_mean_residual_rms": 0.068,
+  "word2_mean_residual_rms": 0.0854,
+  "residual_rms_ratio": 1.257,
+  "word1_vowel_formants_hz": [
+    1256.4,
+    2630.1
+  ],
+  "word2_vowel_formants_hz": [
+    1211.2,
+    2653.4
+  ],
+  "acoustic_interpretation": "Minimal pair contrast (Oral vs Nasalized): LPC cosine distance is 0.1029. The nasalized syllable introduces an acoustic zero (anti-resonance) and an extra low-frequency nasal pole (~280-320 Hz), broadening formant bandwidths. The residual energy ratio is 1.26, reflecting glottal-nasal acoustic coupling.",
+  "comparison_plot": "outputs/comparison\\comparison_baas_vs_baans.png",
+  "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_baas_vs_baans.png"
+}
