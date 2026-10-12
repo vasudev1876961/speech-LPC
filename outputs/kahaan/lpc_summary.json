@@ -1,0 +1,29 @@
+{
+  "file_name": "kahaan.wav",
+  "fs": 16000,
+  "duration_seconds": 0.74,
+  "total_samples": 11840,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 72,
+  "coefficients_shape": [
+    72,
+    17
+  ],
+  "mean_prediction_gain_db": 3.06,
+  "mean_residual_rms": 0.1006,
+  "residual_spectral_flatness": 0.4978,
+  "speech_spectral_flatness": 0.244,
+  "representative_formants_hz": [
+    1304.2,
+    2775.7,
+    3572.0,
+    4622.2
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs/kahaan\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs/kahaan\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs/kahaan\\lpc_residual.wav"
+  }
+}

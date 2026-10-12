@@ -1,0 +1,26 @@
+{
+  "file_name": "hello.wav",
+  "fs": 16000,
+  "duration_seconds": 0.7,
+  "total_samples": 11200,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 68,
+  "coefficients_shape": [
+    68,
+    17
+  ],
+  "mean_prediction_gain_db": 4.74,
+  "mean_residual_rms": 0.0585,
+  "residual_spectral_flatness": 0.5008,
+  "speech_spectral_flatness": 0.1868,
+  "representative_formants_hz": [
+    1140.7
+  ],
+  "outputs": {
+    "lpc_coefficients_npy": "outputs\\hello\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs\\hello\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs\\hello\\lpc_residual.wav"
+  }
+}
