@@ -11,12 +11,25 @@ Complete Modular DSP & Acoustic Phonetics Architecture:
   - Studio 6: System Architecture & DSP Technical Specifications Studio
 """
 
+import sys
 import os
+from pathlib import Path
+
+# Ensure application root directory is first on sys.path (crucial for Streamlit Cloud deployment)
+APP_DIR = Path(__file__).resolve().parent
+if str(APP_DIR) not in sys.path:
+    sys.path.insert(0, str(APP_DIR))
+
 import io
 import json
 import numpy as np
 import streamlit as st
+
+# Force Matplotlib headless Agg backend for Linux / Streamlit Cloud containers
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
 import scipy.io.wavfile as wavfile
 
 from lpc_core.preprocessor import load_and_preprocess_audio, save_wav_file
@@ -38,15 +51,28 @@ from lpc_core.classifier import (
     compute_dtw,
     run_corpus_classification_benchmark
 )
-from lpc_core.visualizer import (
-    plot_waveform_and_residual,
-    plot_spectrogram_comparison,
-    plot_lpc_spectral_envelope,
-    plot_zplane_poles,
-    plot_dtw_alignment,
-    plot_phase_timing,
-    plot_group_delay
-)
+
+try:
+    from lpc_core.visualizer import (
+        plot_waveform_and_residual,
+        plot_spectrogram_comparison,
+        plot_lpc_spectral_envelope,
+        plot_zplane_poles,
+        plot_dtw_alignment,
+        plot_phase_timing,
+        plot_group_delay
+    )
+except ImportError:
+    from lpc_core import (
+        plot_waveform_and_residual,
+        plot_spectrogram_comparison,
+        plot_lpc_spectral_envelope,
+        plot_zplane_poles,
+        plot_dtw_alignment,
+        plot_phase_timing,
+        plot_group_delay
+    )
+
 from compare_words import compare_pair
 
 # -------------------------------------------------------------
@@ -651,7 +677,7 @@ elif workspace.startswith("6."):
             """)
         with col_phy2:
             st.markdown("##### 👃 Nasalized Vowel Production (/ã/)")
-            st.markdown("""
+            st.markdown(r"""
             - **Velum Configuration**: Velum is actively lowered, acoustically coupling the nasal cavity in parallel with the oral cavity.
             - **Acoustic Waveguide**: Branched resonator with acoustic side cavity.
             - **Filter Architecture**: **Pole-zero** system with transmission zeros (anti-resonances).

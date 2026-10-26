@@ -6,9 +6,15 @@ residual waveforms, spectrograms, formant envelopes, and acoustic comparisons.
 """
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from scipy.signal import spectrogram
-from .formant_analyzer import compute_lpc_spectrum, extract_formants_from_lpc
+
+try:
+    from .formant_analyzer import compute_lpc_spectrum, extract_formants_from_lpc
+except ImportError:
+    from lpc_core.formant_analyzer import compute_lpc_spectrum, extract_formants_from_lpc
 
 # Styling defaults for crisp, professional graphs
 plt.rcParams['font.sans-serif'] = 'DejaVu Sans'

@@ -21,6 +21,8 @@ import sys
 import json
 import argparse
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from lpc_core.preprocessor import load_and_preprocess_audio, save_wav_file
