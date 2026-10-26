@@ -167,3 +167,135 @@ def plot_word_comparison(res1, res2, name1="Word A (kaha)", name2="Word B (kahaa
     if save_path:
         plt.savefig(save_path, dpi=200, bbox_inches='tight')
     return fig
+
+def plot_zplane_poles(a, fs=16000, title="LPC All-Pole Filter in Z-Plane", save_path=None):
+    """
+    Plots the roots of the LPC polynomial A(z) in the complex z-plane.
+    Shows the unit circle, pole positions (x), and formant angles.
+    """
+    roots = np.roots(a)
+    
+    fig, ax = plt.subplots(figsize=(6, 6))
+    # Unit circle
+    theta = np.linspace(0, 2 * np.pi, 300)
+    ax.plot(np.cos(theta), np.sin(theta), color='#555555', linestyle='--', lw=1.2, label='Unit Circle (|z|=1)')
+    
+    # Axes
+    ax.axhline(0, color='#aaaaaa', lw=0.8)
+    ax.axvline(0, color='#aaaaaa', lw=0.8)
+    
+    # Poles
+    ax.scatter(np.real(roots), np.imag(roots), color='#d62728', marker='x', s=70, lw=2.0, label='LPC Poles (Resonances)')
+    
+    # Annotate formants in upper half
+    formants, _ = extract_formants_from_lpc(a, fs=fs)
+    for i, f in enumerate(formants[:3]):
+        angle = 2.0 * np.pi * f / fs
+        ax.plot([0, np.cos(angle)], [0, np.sin(angle)], color='#2ca02c', linestyle=':', alpha=0.7)
+        ax.text(1.08 * np.cos(angle), 1.08 * np.sin(angle), f"F{i+1}\n({int(f)}Hz)", color='#1b611b', fontsize=8, fontweight='bold', ha='center')
+        
+    ax.set_title(title, fontsize=11, fontweight='bold', pad=10)
+    ax.set_xlabel("Real Axis", fontsize=10)
+    ax.set_ylabel("Imaginary Axis", fontsize=10)
+    ax.set_xlim(-1.3, 1.3)
+    ax.set_ylim(-1.3, 1.3)
+    ax.set_aspect('equal')
+    ax.grid(True, linestyle=':', alpha=0.5)
+    ax.legend(loc='lower right', fontsize=8)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    return fig
+
+def plot_dtw_alignment(cost_matrix, path, name1="Word 1", name2="Word 2", dist=0.0, save_path=None):
+    """
+    Visualizes Dynamic Time Warping (DTW) accumulated cost matrix and optimal warping path.
+    """
+    fig, ax = plt.subplots(figsize=(7, 6))
+    im = ax.imshow(cost_matrix.T, origin='lower', cmap='viridis', aspect='auto')
+    
+    # Warping path
+    path_x = [p[0] for p in path]
+    path_y = [p[1] for p in path]
+    ax.plot(path_x, path_y, color='#ff7f0e', lw=2.5, label=f'Optimal Path (Dist: {dist:.3f})')
+    
+    ax.set_title(f"Dynamic Time Warping (DTW): {name1} vs {name2}", fontsize=11, fontweight='bold')
+    ax.set_xlabel(f"{name1} Frame Index", fontsize=10)
+    ax.set_ylabel(f"{name2} Frame Index", fontsize=10)
+    fig.colorbar(im, ax=ax, label="Cumulative Distance")
+    ax.legend(loc='upper left', fontsize=9)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    return fig
+
+def plot_phase_timing(residual, zfr, gci_indices, fs=16000, title="Epoch (GCI) & Phase Analysis", save_path=None):
+    """
+    Plots the LPC residual along with the Zero Frequency Resonator (ZFR) signal
+    and detected Glottal Closure Instants (GCIs / Epochs).
+    """
+    # Zoom in to a representative 60 ms voiced segment
+    dur_ms = 60.0
+    num_samples = int(dur_ms * 1e-3 * fs)
+    start_sample = max(0, int(len(residual) * 0.45))
+    end_sample = min(len(residual), start_sample + num_samples)
+    
+    t_axis = (np.arange(start_sample, end_sample) - start_sample) / fs * 1000.0 # in ms
+    sub_res = residual[start_sample:end_sample]
+    sub_zfr = zfr[start_sample:end_sample]
+    
+    # GCIs within segment
+    mask = (gci_indices >= start_sample) & (gci_indices < end_sample)
+    sub_gcis = gci_indices[mask]
+    sub_gci_t = (sub_gcis - start_sample) / fs * 1000.0
+    
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 5.5), sharex=True)
+    
+    # Residual with Epoch markers
+    ax1.plot(t_axis, sub_res, color='#1f77b4', lw=1.0, label='LPC Residual e[n]')
+    for gt in sub_gci_t:
+        ax1.axvline(gt, color='#d62728', linestyle='--', alpha=0.8, lw=1.2)
+    ax1.scatter(sub_gci_t, [0]*len(sub_gci_t), color='#d62728', s=40, zorder=5, label='Epochs (GCIs)')
+    ax1.set_title(f"{title} - LPC Residual with Glottal Closure Instants (GCIs)", fontsize=11, fontweight='bold')
+    ax1.set_ylabel("Amplitude")
+    ax1.grid(True, linestyle='--', alpha=0.5)
+    ax1.legend(loc='upper right', fontsize=9)
+    
+    # ZFR signal with zero crossings
+    ax2.plot(t_axis, sub_zfr, color='#2ca02c', lw=1.2, label='ZFR Signal (0-Hz Trend Removed)')
+    ax2.axhline(0, color='#666666', linestyle='-', lw=0.8)
+    for gt in sub_gci_t:
+        ax2.axvline(gt, color='#d62728', linestyle='--', alpha=0.8, lw=1.2)
+    ax2.set_title("Zero Frequency Resonator (ZFR) Trend-Removed Signal (Positive Zero Crossings = GCIs)", fontsize=11, fontweight='bold')
+    ax2.set_xlabel("Time (ms)")
+    ax2.set_ylabel("Normalized ZFR")
+    ax2.grid(True, linestyle='--', alpha=0.5)
+    ax2.legend(loc='upper right', fontsize=9)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    return fig
+
+def plot_group_delay(freqs, tau_mod, fs=16000, title="Modified Group Delay Spectrum", save_path=None):
+    """
+    Plots the Modified Group Delay (MGD) spectrum highlighting formant peaks
+    and anti-resonance zeros.
+    """
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.plot(freqs, tau_mod, color='#9467bd', lw=1.5, label='Modified Group Delay')
+    ax.axhline(0, color='#888888', linestyle='--', lw=0.8)
+    ax.set_title(title, fontsize=11, fontweight='bold')
+    ax.set_xlabel("Frequency (Hz)", fontsize=10)
+    ax.set_ylabel("Group Delay (Arbitrary Units)", fontsize=10)
+    ax.set_xlim(0, fs / 2)
+    ax.grid(True, linestyle='--', alpha=0.5)
+    ax.legend(loc='upper right', fontsize=9)
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=200, bbox_inches='tight')
+    return fig
+

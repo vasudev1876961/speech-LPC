@@ -99,7 +99,7 @@ def compute_spectral_flatness(signal, frame_len=400, hop_len=160):
 
 def extract_lpc_features(raw_signal, residual, lpc_results):
     """
-    Aggregates all key features into a comprehensive dictionary for Member 3 and Member 4.
+    Aggregates all key features into a comprehensive dictionary for downstream analytical modules.
     """
     fs = lpc_results['fs']
     frame_len = lpc_results['frame_len']

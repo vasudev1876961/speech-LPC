@@ -1,0 +1,87 @@
+{
+  "file_name": "vowel_a.wav",
+  "fs": 16000,
+  "duration_seconds": 0.65,
+  "total_samples": 10400,
+  "lpc_order": 16,
+  "frame_ms": 25.0,
+  "hop_ms": 10.0,
+  "num_frames": 63,
+  "coefficients_shape": [
+    63,
+    17
+  ],
+  "reconstruction_snr_db": 25.58,
+  "mean_prediction_gain_db": 4.01,
+  "mean_residual_rms": 0.0965,
+  "residual_spectral_flatness": 0.4499,
+  "speech_spectral_flatness": 0.1798,
+  "representative_formants_hz": [
+    2679.4,
+    3462.2,
+    6405.4,
+    7474.7
+  ],
+  "mid_frame_lpcc": [
+    -0.1163,
+    -0.3508,
+    -0.2959,
+    -0.1969,
+    -0.0371,
+    0.0174,
+    -0.2073,
+    -0.3304,
+    -0.1292,
+    0.0295,
+    0.0074,
+    0.1136
+  ],
+  "mid_frame_lsf_rad": [
+    0.3304,
+    0.4567,
+    0.5647,
+    0.8165,
+    1.0354,
+    1.0883,
+    1.2937,
+    1.4127,
+    1.6613,
+    1.8725,
+    2.0287,
+    2.1659,
+    2.4225,
+    2.553,
+    2.7904,
+    2.9461
+  ],
+  "glottal_timing": {
+    "num_epochs": 64,
+    "mean_f0_hz": 112.6,
+    "mean_pitch_period_ms": 8.88,
+    "jitter_local_pct": 7.534,
+    "jitter_rap_pct": 3.851,
+    "shimmer_local_pct": 41.482,
+    "shimmer_apq3_pct": 22.802,
+    "hnr_db": -14.07,
+    "phase_coherence": 0.507
+  },
+  "classification": {
+    "predicted_class": "Oral Vowel (/a/)",
+    "confidence": 0.82,
+    "probabilities": {
+      "Oral": 0.82,
+      "Nasalized": 0.18
+    },
+    "acoustic_explanation": [
+      "Clear oral energy profile with negligible nasal murmur (ratio: 0.02).",
+      "Formant F1 bandwidth is broadened (236 Hz) indicating acoustic damping from nasal tract walls.",
+      "Smooth all-pole spectral transition with no pronounced anti-resonance zero."
+    ]
+  },
+  "outputs": {
+    "lpc_coefficients_npy": "outputs\\vowel_a\\lpc_coefficients.npy",
+    "lpc_residual_npy": "outputs\\vowel_a\\lpc_residual.npy",
+    "lpc_residual_wav": "outputs\\vowel_a\\lpc_residual.wav",
+    "lpc_resynthesized_wav": "outputs\\vowel_a\\lpc_resynthesized.wav"
+  }
+}

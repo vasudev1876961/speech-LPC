@@ -3,7 +3,7 @@ compare_words.py
 ----------------
 Compares LPC coefficients, formant resonances, and residual characteristics
 between two speech recordings (e.g., minimal pairs, male vs female voices, vowels).
-Generates comparative metrics and visualizations for Member 3 and Member 4.
+Generates comparative metrics and visualizations for Module 3 and Module 4.
 """
 
 import os

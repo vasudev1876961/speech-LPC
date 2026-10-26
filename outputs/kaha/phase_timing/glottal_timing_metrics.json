@@ -1,0 +1,11 @@
+{
+  "num_epochs": 56,
+  "mean_f0_hz": 104.58,
+  "mean_pitch_period_ms": 9.56,
+  "jitter_local_pct": 23.002,
+  "jitter_rap_pct": 13.307,
+  "shimmer_local_pct": 50.063,
+  "shimmer_apq3_pct": 28.086,
+  "hnr_db": -13.58,
+  "phase_coherence": 0.5198
+}

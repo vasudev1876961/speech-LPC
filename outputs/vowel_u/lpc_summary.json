@@ -11,6 +11,7 @@
     63,
     17
   ],
+  "reconstruction_snr_db": 25.58,
   "mean_prediction_gain_db": 4.2,
   "mean_residual_rms": 0.0825,
   "residual_spectral_flatness": 0.4861,
@@ -19,9 +20,66 @@
     871.8,
     2256.9
   ],
+  "mid_frame_lpcc": [
+    -0.0994,
+    -0.5148,
+    -0.494,
+    -0.3682,
+    0.0423,
+    0.1946,
+    0.0373,
+    -0.1067,
+    -0.2862,
+    -0.2902,
+    -0.2913,
+    -0.0369
+  ],
+  "mid_frame_lsf_rad": [
+    0.3343,
+    0.369,
+    0.816,
+    0.8856,
+    0.9355,
+    1.0839,
+    1.236,
+    1.4302,
+    1.629,
+    1.8407,
+    2.0349,
+    2.1949,
+    2.3858,
+    2.5635,
+    2.732,
+    2.9692
+  ],
+  "glottal_timing": {
+    "num_epochs": 69,
+    "mean_f0_hz": 113.89,
+    "mean_pitch_period_ms": 8.78,
+    "jitter_local_pct": 6.831,
+    "jitter_rap_pct": 4.192,
+    "shimmer_local_pct": 54.472,
+    "shimmer_apq3_pct": 32.957,
+    "hnr_db": -12.63,
+    "phase_coherence": 0.4727
+  },
+  "classification": {
+    "predicted_class": "Oral Vowel (/a/)",
+    "confidence": 0.92,
+    "probabilities": {
+      "Oral": 0.92,
+      "Nasalized": 0.08
+    },
+    "acoustic_explanation": [
+      "Clear oral energy profile with negligible nasal murmur (ratio: 0.20).",
+      "Formant F1 resonance is sharp and well-defined (94 Hz bandwidth).",
+      "Significant spectral anti-resonance notch detected between F1 and F2 (depth factor: 7.2)."
+    ]
+  },
   "outputs": {
     "lpc_coefficients_npy": "outputs/vowel_u\\lpc_coefficients.npy",
     "lpc_residual_npy": "outputs/vowel_u\\lpc_residual.npy",
-    "lpc_residual_wav": "outputs/vowel_u\\lpc_residual.wav"
+    "lpc_residual_wav": "outputs/vowel_u\\lpc_residual.wav",
+    "lpc_resynthesized_wav": "outputs/vowel_u\\lpc_resynthesized.wav"
   }
 }
