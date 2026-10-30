@@ -178,15 +178,18 @@ hop_ms = st.sidebar.slider("Hop Length (ms)", 5.0, 20.0, 10.0, 2.5, help="Frame 
 pre_emphasis = st.sidebar.checkbox("Pre-emphasis (alpha=0.97)", True, help="Boosts higher formants by flattening glottal roll-off.")
 
 def get_audio_input(prefix="main"):
+    sources = ["Preset Sample", "Upload Custom WAV"]
+    if hasattr(st, "audio_input"):
+        sources.append("🎙️ Live Microphone")
     col1, col2 = st.columns([2, 2])
     with col1:
-        input_source = st.radio("Audio Source:", ["Preset Sample", "Upload Custom WAV"], horizontal=True, key=f"{prefix}_src")
+        input_source = st.radio("Audio Source:", sources, horizontal=True, key=f"{prefix}_src")
     audio_path = None
     if input_source == "Preset Sample":
         with col2:
             preset = st.selectbox("Select Audio Utterance:", list(PRESET_AUDIOS.keys()), key=f"{prefix}_preset")
             audio_path = PRESET_AUDIOS[preset]
-    else:
+    elif input_source == "Upload Custom WAV":
         with col2:
             uploaded_file = st.file_uploader("Upload WAV file (16kHz recommended)", type=["wav"], key=f"{prefix}_upload")
             if uploaded_file is not None:
@@ -194,6 +197,14 @@ def get_audio_input(prefix="main"):
                 audio_path = os.path.join("scratch", uploaded_file.name)
                 with open(audio_path, "wb") as f:
                     f.write(uploaded_file.getbuffer())
+    elif input_source == "🎙️ Live Microphone":
+        with col2:
+            mic_file = st.audio_input("Record speech (1-2 seconds):", key=f"{prefix}_mic")
+            if mic_file is not None:
+                os.makedirs("scratch", exist_ok=True)
+                audio_path = os.path.join("scratch", f"{prefix}_live_mic.wav")
+                with open(audio_path, "wb") as f:
+                    f.write(mic_file.read())
     return audio_path
 
 # =============================================================
@@ -737,20 +748,35 @@ elif workspace.startswith("6."):
         st.caption("Benchmarks measured on Python 3.12 64-bit environment operating on 16 kHz acoustic signals.")
 
     with spec_tab4:
-        st.subheader("4. Technical Documentation & Whitepaper Specifications")
+        st.subheader("4. Technical Documentation, Engineering Manual & Viva Guide")
         st.markdown("""
-        The system provides two formal publication-grade engineering documents:
+        The system provides three comprehensive publication-grade engineering and academic documents:
+        - **[PROJECT_EXPLANATION_AND_VIVA.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/PROJECT_EXPLANATION_AND_VIVA.md)**: 48 Comprehensive viva voce Q&As, examiner traps, live demonstration script, and architectural breakdowns.
         - **[TECHNICAL_REPORT.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/TECHNICAL_REPORT.md)**: Formal research whitepaper covering mathematical derivations, velopharyngeal coupling physics, experimental benchmarks, and complexity profiling.
         - **[ENGINEERING_MANUAL.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/ENGINEERING_MANUAL.md)**: Complete engineering reference manual and 30 in-depth architectural and DSP technical specifications.
         """)
         
-        col_doc1, col_doc2 = st.columns(2)
+        col_doc1, col_doc2, col_doc3 = st.columns(3)
+        viva_content = ""
+        report_content = ""
+        manual_content = ""
+        
+        if os.path.exists("PROJECT_EXPLANATION_AND_VIVA.md"):
+            with open("PROJECT_EXPLANATION_AND_VIVA.md", "r", encoding="utf-8") as f:
+                viva_content = f.read()
+            with col_doc1:
+                st.download_button(
+                    "🎓 Viva Voce Guide (.md)",
+                    data=viva_content,
+                    file_name="LPC_Viva_Voce_Guide.md",
+                    mime="text/markdown"
+                )
         if os.path.exists("TECHNICAL_REPORT.md"):
             with open("TECHNICAL_REPORT.md", "r", encoding="utf-8") as f:
                 report_content = f.read()
-            with col_doc1:
+            with col_doc2:
                 st.download_button(
-                    "📥 Download Research Whitepaper (TECHNICAL_REPORT.md)",
+                    "📥 Research Whitepaper (.md)",
                     data=report_content,
                     file_name="LPC_Technical_Whitepaper.md",
                     mime="text/markdown"
@@ -758,20 +784,24 @@ elif workspace.startswith("6."):
         if os.path.exists("ENGINEERING_MANUAL.md"):
             with open("ENGINEERING_MANUAL.md", "r", encoding="utf-8") as f:
                 manual_content = f.read()
-            with col_doc2:
+            with col_doc3:
                 st.download_button(
-                    "📥 Download Engineering Manual (ENGINEERING_MANUAL.md)",
+                    "📥 Engineering Manual (.md)",
                     data=manual_content,
                     file_name="LPC_Engineering_Manual.md",
                     mime="text/markdown"
                 )
                 
+        with st.expander("🎓 Preview Viva Voce & Defense Guide (PROJECT_EXPLANATION_AND_VIVA.md)", expanded=False):
+            if viva_content:
+                st.markdown(viva_content[:6000] + "\n\n*(Full 12-section guide available in PROJECT_EXPLANATION_AND_VIVA.md...)*")
+                
         with st.expander("📄 Preview Formal Whitepaper (TECHNICAL_REPORT.md)", expanded=False):
-            if os.path.exists("TECHNICAL_REPORT.md"):
+            if report_content:
                 st.markdown(report_content[:5000] + "\n\n*(Full 10-section report available in TECHNICAL_REPORT.md...)*")
         
         with st.expander("📄 Preview Engineering Reference Manual (ENGINEERING_MANUAL.md)", expanded=False):
-            if os.path.exists("ENGINEERING_MANUAL.md"):
+            if manual_content:
                 st.markdown(manual_content[:5000] + "\n\n*(Full 14-section manual available in ENGINEERING_MANUAL.md...)*")
 
 

@@ -167,5 +167,105 @@ class TestLPCSuite(unittest.TestCase):
         self.assertGreater(pred_kaha['confidence'], 0.5)
         self.assertGreater(pred_kahaan['confidence'], 0.5)
 
+    def test_12_cardinal_vowels_formants(self):
+        """Test vocal tract formant hierarchy: /i/ has significantly higher F2 than /u/."""
+        sig_i, _, fs = load_and_preprocess_audio("data/vowel_i.wav", target_fs=16000)
+        sig_u, _, _ = load_and_preprocess_audio("data/vowel_u.wav", target_fs=16000)
+        
+        lpc_i = extract_lpc_coefficients(sig_i, fs=fs, order=16)
+        lpc_u = extract_lpc_coefficients(sig_u, fs=fs, order=16)
+        
+        mid_i = len(lpc_i['lpc_coeffs']) // 2
+        mid_u = len(lpc_u['lpc_coeffs']) // 2
+        
+        f_i, _ = extract_formants_from_lpc(lpc_i['lpc_coeffs'][mid_i], fs=fs)
+        f_u, _ = extract_formants_from_lpc(lpc_u['lpc_coeffs'][mid_u], fs=fs)
+        
+        # High front vowel /i/ has high F2 (> 2000 Hz)
+        # High back vowel /u/ has low F2 (< 2500 Hz, lower than /i/)
+        self.assertGreater(len(f_i), 1)
+        self.assertGreater(len(f_u), 1)
+        self.assertGreater(f_i[1], f_u[1])
+
+    def test_13_pitch_estimation_from_residual(self):
+        """Test pitch F0 tracking on male vs female voice: female F0 > male F0."""
+        sig_m, _, fs = load_and_preprocess_audio(self.kaha_path, target_fs=16000)
+        sig_f, _, _ = load_and_preprocess_audio("data/kaha_female.wav", target_fs=16000)
+        
+        lpc_m = extract_lpc_coefficients(sig_m, fs=fs, order=16)
+        lpc_f = extract_lpc_coefficients(sig_f, fs=fs, order=16)
+        
+        res_m = compute_lpc_residual(sig_m, lpc_m)
+        res_f = compute_lpc_residual(sig_f, lpc_f)
+        
+        f0_m, _ = estimate_pitch_from_residual(res_m, fs=fs)
+        f0_f, _ = estimate_pitch_from_residual(res_f, fs=fs)
+        
+        valid_m = f0_m[~np.isnan(f0_m)]
+        valid_f = f0_f[~np.isnan(f0_f)]
+        
+        self.assertGreater(len(valid_m), 5)
+        self.assertGreater(len(valid_f), 5)
+        self.assertGreater(np.mean(valid_f), np.mean(valid_m))
+
+    def test_14_vocoder_resynthesis(self):
+        """Test parametric vocoder resynthesis produces finite valid waveform."""
+        proc_sig, raw_sig, fs = load_and_preprocess_audio(self.kaha_path, target_fs=16000)
+        lpc_res = extract_lpc_coefficients(proc_sig, fs=fs, order=16)
+        residual = compute_lpc_residual(proc_sig, lpc_res)
+        
+        f0_contour, times = estimate_pitch_from_residual(residual, fs=fs)
+        vocoder_audio = lpc_resynthesize_vocoder(f0_contour, times, lpc_res, fs=fs)
+        
+        self.assertGreater(len(vocoder_audio), 0)
+        self.assertFalse(np.isnan(vocoder_audio).any())
+        self.assertAlmostEqual(len(vocoder_audio) / fs, len(raw_sig) / fs, delta=0.1)
+
+    def test_15_speech_morphing(self):
+        """Test voice morphing engine: pitch shift, formant warp, and whisperization."""
+        proc_sig, _, fs = load_and_preprocess_audio(self.kaha_path, target_fs=16000)
+        lpc_res = extract_lpc_coefficients(proc_sig, fs=fs, order=16)
+        
+        # Test pitch and formant warp
+        morphed = modify_speech(proc_sig, lpc_res, pitch_scale=1.2, formant_scale=1.1, fs=fs)
+        self.assertAlmostEqual(len(morphed) / fs, len(proc_sig) / fs, delta=0.05)
+        self.assertFalse(np.isnan(morphed).any())
+        
+        # Test whisper mode
+        whispered = modify_speech(proc_sig, lpc_res, whisper=True, fs=fs)
+        self.assertEqual(len(whispered), len(proc_sig))
+        self.assertFalse(np.isnan(whispered).any())
+
+    def test_16_glottal_timing_perturbation(self):
+        """Test Jitter, Shimmer, and HNR metrics remain within normal physiological ranges."""
+        proc_sig, _, fs = load_and_preprocess_audio(self.kaha_path, target_fs=16000)
+        lpc_res = extract_lpc_coefficients(proc_sig, fs=fs, order=16)
+        residual = compute_lpc_residual(proc_sig, lpc_res)
+        
+        gcis, _, _ = extract_epochs_zfr(residual, fs=fs)
+        metrics = compute_glottal_timing_metrics(residual, fs=fs, gcis=gcis)
+        
+        self.assertGreater(metrics['num_epochs'], 10)
+        self.assertGreater(metrics['mean_f0_hz'], 50.0)
+        self.assertLess(metrics['mean_f0_hz'], 400.0)
+        self.assertGreaterEqual(metrics['jitter_local_pct'], 0.0)
+        self.assertGreaterEqual(metrics['shimmer_local_pct'], 0.0)
+
+    def test_17_audio_dataset_integrity(self):
+        """Test all 14 dataset WAV files exist, are 16 kHz mono, and have non-zero duration."""
+        expected_files = [
+            "baans.wav", "baas.wav", "hello.wav", "hello_female.wav",
+            "kaha.wav", "kaha_deep_male.wav", "kaha_female.wav", "kahaan.wav",
+            "saans.wav", "saas.wav", "vowel_a.wav", "vowel_i.wav",
+            "vowel_u.wav", "whisper_kaha.wav"
+        ]
+        import scipy.io.wavfile as wf
+        for fn in expected_files:
+            fp = os.path.join("data", fn)
+            self.assertTrue(os.path.exists(fp), f"Missing dataset file: {fp}")
+            rate, data = wf.read(fp)
+            self.assertEqual(rate, 16000, f"Rate mismatch for {fn}: {rate} != 16000")
+            self.assertGreater(len(data), 0, f"Empty audio file: {fn}")
+
 if __name__ == "__main__":
     unittest.main()

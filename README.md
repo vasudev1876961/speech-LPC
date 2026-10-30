@@ -88,11 +88,13 @@ LPC/
 ├── compare_words.py                      # CLI tool for acoustic minimal pair comparisons
 ├── run_pipeline.py                       # Master orchestrator executing entire corpus pipeline
 ├── generate_test_audio.py                # Source-filter speech synthesis tool
-├── app.py                                # Interactive Streamlit Web Application (6 workspaces)
+├── create_notebook.py                    # Programmatic generator for the Jupyter DSP walkthrough
+├── app.py                                # Interactive Streamlit Web Application (6 workspaces + mic input)
 ├── LPC_Analysis_Walkthrough.ipynb        # 10-step Jupyter Notebook for interactive DSP demonstration
 ├── tests/                                # Comprehensive Unit Test Suite
 │   ├── __init__.py
-│   └── test_lpc_suite.py                 # 11 unit tests covering all DSP formulations
+│   └── test_lpc_suite.py                 # 17 unit tests covering all DSP formulations & physics
+├── PROJECT_EXPLANATION_AND_VIVA.md       # Comprehensive Project Defense, Architecture & 48 Viva Q&As
 ├── TECHNICAL_REPORT.md                   # Comprehensive Research Whitepaper & Technical Specification
 ├── ENGINEERING_MANUAL.md                 # Engineering Reference Manual & Technical Architecture Specifications
 ├── requirements.txt                      # Project dependencies
@@ -199,8 +201,10 @@ Featuring 6 specialized workspaces:
 ### 8. Run Unit Test Suite
 ```bash
 python tests/test_lpc_suite.py
+# or
+pytest
 ```
-Executes 11 unit tests verifying mathematical invertibility, Levinson-Durbin stability, Burg's method, LSF monotonicity, LPCC recursion, resynthesis SNR, ZFR epochs, Hilbert phase, DTW alignment, and classifier accuracy.
+Executes 17 unit tests verifying mathematical invertibility, Levinson-Durbin stability, Burg's method, LSF monotonicity, LPCC recursion, resynthesis SNR, ZFR epochs, Hilbert phase, DTW alignment, cardinal vowel formant hierarchy, pitch tracking, vocoder synthesis, voice morphing, glottal timing, dataset integrity, and classifier accuracy.
 
 ---
 
@@ -220,6 +224,7 @@ Executes 11 unit tests verifying mathematical invertibility, Levinson-Durbin sta
 
 ---
 
-## 📄 Research Whitepaper & Technical Documentation
+## 📄 Project Documentation & Research Publications
+- **[PROJECT_EXPLANATION_AND_VIVA.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/PROJECT_EXPLANATION_AND_VIVA.md)**: Comprehensive viva voce guide, architecture breakdowns, 48 examiner questions and model answers, examiner trap questions, and live demonstration script.
 - **[TECHNICAL_REPORT.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/TECHNICAL_REPORT.md)**: Formal research whitepaper covering theoretical derivations, acoustic phonetics of velopharyngeal coupling, full corpus measurements, and experimental benchmarks.
 - **[ENGINEERING_MANUAL.md](file:///c:/Users/vasud/OneDrive/Desktop/LPC/ENGINEERING_MANUAL.md)**: In-depth engineering reference manual and comprehensive technical specifications.

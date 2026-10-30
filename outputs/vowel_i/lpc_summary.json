@@ -12,68 +12,69 @@
     17
   ],
   "reconstruction_snr_db": 25.58,
-  "mean_prediction_gain_db": 7.21,
-  "mean_residual_rms": 0.0731,
-  "residual_spectral_flatness": 0.4843,
-  "speech_spectral_flatness": 0.0966,
+  "mean_prediction_gain_db": 13.91,
+  "mean_residual_rms": 0.0094,
+  "residual_spectral_flatness": 0.5596,
+  "speech_spectral_flatness": 0.0242,
   "representative_formants_hz": [
-    2343.3,
-    2988.8
+    243.6,
+    2323.1,
+    3023.3
   ],
   "mid_frame_lpcc": [
-    -0.6283,
-    -1.1477,
-    -0.9085,
-    -0.4126,
-    -0.1583,
-    0.2756,
-    0.1837,
-    -0.0587,
-    -0.1243,
-    -0.0028,
-    0.083,
-    -0.0247
+    1.6097,
+    -0.2643,
+    -0.3663,
+    -0.0668,
+    0.3224,
+    0.4514,
+    0.3728,
+    0.2169,
+    0.0925,
+    0.0775,
+    0.0706,
+    0.0641
   ],
   "mid_frame_lsf_rad": [
-    0.489,
-    0.672,
-    0.875,
-    0.9259,
-    1.0362,
-    1.1654,
-    1.2318,
-    1.4976,
-    1.6838,
-    1.847,
-    1.9806,
-    2.183,
-    2.3703,
-    2.5753,
-    2.8003,
-    2.9595
+    0.0949,
+    0.1377,
+    0.5964,
+    0.7723,
+    0.9047,
+    0.9353,
+    1.1462,
+    1.21,
+    1.4278,
+    1.6115,
+    1.8361,
+    2.0336,
+    2.2617,
+    2.4659,
+    2.6858,
+    2.9137
   ],
   "glottal_timing": {
-    "num_epochs": 70,
-    "mean_f0_hz": 114.07,
-    "mean_pitch_period_ms": 8.77,
-    "jitter_local_pct": 9.195,
-    "jitter_rap_pct": 5.661,
-    "shimmer_local_pct": 49.197,
-    "shimmer_apq3_pct": 25.826,
-    "hnr_db": -13.74,
-    "phase_coherence": 0.4943
+    "num_epochs": 77,
+    "mean_f0_hz": 122.01,
+    "mean_pitch_period_ms": 8.2,
+    "jitter_local_pct": 3.203,
+    "jitter_rap_pct": 1.985,
+    "shimmer_local_pct": 34.846,
+    "shimmer_apq3_pct": 18.306,
+    "hnr_db": -12.1,
+    "phase_coherence": 0.3456
   },
   "classification": {
     "predicted_class": "Oral Vowel (/a/)",
-    "confidence": 0.94,
+    "confidence": 0.9,
     "probabilities": {
-      "Oral": 0.94,
-      "Nasalized": 0.06
+      "Oral": 0.9,
+      "Nasalized": 0.1
     },
     "acoustic_explanation": [
-      "Clear oral energy profile with negligible nasal murmur (ratio: 0.02).",
-      "Formant F1 bandwidth is broadened (220 Hz) indicating acoustic damping from nasal tract walls.",
-      "Significant spectral anti-resonance notch detected between F1 and F2 (depth factor: 12.8)."
+      "Strong low-frequency nasal pole resonance observed (Nasal/Oral energy ratio: 1.55).",
+      "Formant F1 resonance is sharp and well-defined (46 Hz bandwidth).",
+      "Significant spectral anti-resonance notch detected between F1 and F2 (depth factor: 61.2)."
     ]
   },
   "outputs": {

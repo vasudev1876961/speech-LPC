@@ -3,20 +3,21 @@
   "word2": "vowel_u",
   "file1": "data/vowel_i.wav",
   "file2": "data/vowel_u.wav",
-  "mean_lpc_cosine_distance": 0.3744,
-  "word1_mean_residual_rms": 0.0731,
-  "word2_mean_residual_rms": 0.0825,
-  "residual_rms_ratio": 1.128,
+  "mean_lpc_cosine_distance": 0.0686,
+  "word1_mean_residual_rms": 0.0094,
+  "word2_mean_residual_rms": 0.0045,
+  "residual_rms_ratio": 0.475,
   "word1_vowel_formants_hz": [
-    2228.9,
-    3021.5,
-    4417.9
+    240.9,
+    2330.1,
+    3028.6
   ],
   "word2_vowel_formants_hz": [
-    839.7,
-    2311.3
+    260.6,
+    874.0,
+    2267.8
   ],
-  "acoustic_interpretation": "Vowel formant topology contrast: Distinct vocal tract geometries yield clear differences in F1 (jaw opening / tongue height) and F2 (tongue advancement / front-back position), reflected in an LPC cosine distance of 0.3744.",
+  "acoustic_interpretation": "Vowel formant topology contrast: Distinct vocal tract geometries yield clear differences in F1 (jaw opening / tongue height) and F2 (tongue advancement / front-back position), reflected in an LPC cosine distance of 0.0686.",
   "comparison_plot": "outputs/comparison\\comparison_vowel_i_vs_vowel_u.png",
   "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_vowel_i_vs_vowel_u.png"
 }

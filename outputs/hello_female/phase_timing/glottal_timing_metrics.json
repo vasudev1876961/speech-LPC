@@ -1,11 +1,11 @@
 {
-  "num_epochs": 68,
-  "mean_f0_hz": 140.73,
-  "mean_pitch_period_ms": 7.11,
-  "jitter_local_pct": 46.634,
-  "jitter_rap_pct": 28.011,
-  "shimmer_local_pct": 38.383,
-  "shimmer_apq3_pct": 21.905,
-  "hnr_db": -12.86,
-  "phase_coherence": 0.5307
+  "num_epochs": 113,
+  "mean_f0_hz": 179.39,
+  "mean_pitch_period_ms": 5.57,
+  "jitter_local_pct": 26.97,
+  "jitter_rap_pct": 16.954,
+  "shimmer_local_pct": 65.373,
+  "shimmer_apq3_pct": 40.032,
+  "hnr_db": -7.44,
+  "phase_coherence": 0.3276
 }

@@ -85,8 +85,8 @@ def extract_epochs_zfr(residual, fs=16000, avg_f0=130.0):
     for idx in zc:
         if not refined_gcis or (idx - refined_gcis[-1] >= min_dist):
             # Check local residual energy near this epoch to reject silence
-            win_check = residual[max(0, idx - 10) : min(N, idx + 10)]
-            if np.max(np.abs(win_check)) > 0.05 * np.max(np.abs(residual)):
+            win_check = residual[max(0, idx - 25) : min(N, idx + 25)]
+            if np.max(np.abs(win_check)) > 0.02 * np.max(np.abs(residual)):
                 refined_gcis.append(idx)
                 
     gci_indices = np.array(refined_gcis, dtype=int)

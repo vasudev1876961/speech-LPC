@@ -3,20 +3,21 @@
   "word2": "hello_female",
   "file1": "data/hello.wav",
   "file2": "data/hello_female.wav",
-  "mean_lpc_cosine_distance": 0.1014,
-  "word1_mean_residual_rms": 0.0666,
-  "word2_mean_residual_rms": 0.0687,
-  "residual_rms_ratio": 1.031,
+  "mean_lpc_cosine_distance": 0.0487,
+  "word1_mean_residual_rms": 0.0095,
+  "word2_mean_residual_rms": 0.0166,
+  "residual_rms_ratio": 1.739,
   "word1_vowel_formants_hz": [
-    961.3,
-    2441.2
+    403.1,
+    951.9,
+    2412.5
   ],
   "word2_vowel_formants_hz": [
-    1133.1,
-    2749.6,
-    3024.2
+    428.1,
+    1081.0,
+    2769.1
   ],
-  "acoustic_interpretation": "Speaker voice comparison (Male vs Female): The female speaker exhibits a substantially higher pitch excitation rate in the LPC residual (shorter pitch periods). Due to an anatomically shorter vocal tract (~14.5 cm vs ~17.5 cm), formant resonances are shifted upward by ~15-20%, resulting in an LPC cosine divergence of 0.1014.",
+  "acoustic_interpretation": "Speaker voice comparison (Male vs Female): The female speaker exhibits a substantially higher pitch excitation rate in the LPC residual (shorter pitch periods). Due to an anatomically shorter vocal tract (~14.5 cm vs ~17.5 cm), formant resonances are shifted upward by ~15-20%, resulting in an LPC cosine divergence of 0.0487.",
   "comparison_plot": "outputs/comparison\\comparison_hello_male_vs_hello_female.png",
   "spectral_envelope_plot": "outputs/comparison\\spectral_envelope_hello_male_vs_hello_female.png"
 }

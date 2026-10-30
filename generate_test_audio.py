@@ -48,10 +48,10 @@ def create_glottal_pulse_train(duration, fs=16000, f0=130.0, jitter=0.01):
     phase = 0.0
     for i in range(num_samples):
         current_f0 = pitch_contour[i] * (1.0 + jitter * (np.random.rand() - 0.5))
-        period_samples = fs / max(current_f0, 40.0)
-        
-        n_mod = phase % period_samples
-        tn = n_mod / period_samples
+        phase += max(current_f0, 40.0) / fs
+        if phase >= 1.0:
+            phase -= 1.0
+        tn = phase
         if tn < 0.4:
             pulse = 0.5 * (1.0 - np.cos(np.pi * tn / 0.4))
         elif tn < 0.6:
@@ -60,7 +60,6 @@ def create_glottal_pulse_train(duration, fs=16000, f0=130.0, jitter=0.01):
             pulse = 0.0
             
         source[i] = pulse
-        phase += 1.0
         
     source_diff = np.diff(source, prepend=source[0])
     return source_diff
